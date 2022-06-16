@@ -255,7 +255,7 @@ def xmltojson (xml_name,json_name):
     
 def junit_creator(tcfName):
     test_case=[]
-    tc =[]
+    tS =[]
     for i in range (0, len(file_coverage)):
         if (file_coverage[i].getcovLines() is not "Not Applicable"):
             test_case.append(TestCase (file_coverage[i].getcovElementType(), file_coverage[i].getcovElementName(), int(file_coverage[i].getcovLines()), file_coverage[i].getcovType() ,file_coverage[i].getcocombCov()))
