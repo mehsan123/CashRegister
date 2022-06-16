@@ -186,7 +186,7 @@ def runanalysis(tcfName):
     #command5=(sourceRoot+'Cashregister.exe ')
     #os.system(command5)
     
-    command5=('echo r q | ' +sourceRoot+'Cashregister.exe ')
+    command5=(sourceRoot+'Cashregister.exe < HLR_Input_Add_Products.txt')
     os.system(command5)
     
     
@@ -264,8 +264,13 @@ def junit_creator(tcfName):
         ts = [TestSuite(tcfName[-17:-4],test_case)]
    
     with open(workarearoot+tcfName[-17:-4]+'_dyn.junit', mode='a') as f:
-        TestSuite.to_file(f, ts)
+        TestSuite.to_file(f, ts)       
+                        
+    print ("Junit file : "+ workarearoot + tcfName[-17:-4]+'_dyn.junit is written successfully ')
 
+
+                        
+                
         
         
 if __name__ == "__main__":
