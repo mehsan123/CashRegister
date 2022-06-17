@@ -197,10 +197,10 @@ def runanalysis(tcfName):
     print('Project Directory is: '+projectDir)
     
     
-    command7 = '{}contestbed.exe {}{} /32faya  -tb_workfiledir={} -exhdir={} '.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, projectDir) #pass ptf as parameter
+    command7 = '{}contestbed.exe {}{} /-run_required_dynamic  -tb_workfiledir={} -exhdir={} '.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, projectDir) #pass ptf as parameter
     
     os.system(command7)
-    
+    print('Dynamic Coverage is finished')
     
     print('TCF Name is:'+tcfName[len(tcfName):-4])
     command8 = '{}integration_util.exe /arg=0 /1={}{}.xml /2={} '.format(toolsuiteroot,workarearoot,tcfName[-17:-4]+'_dyn',workarearoot+tcfName[-17:-4]+'.ldra')
