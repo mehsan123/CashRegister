@@ -1,5 +1,5 @@
-SRCS = Cashregister.c Main.c Productdatabase.c Specialoffer.c Userinterface.c 
-OBJS = Cashregister.o Main.o Productdatabase.o Specialoffer.o Userinterface.o 
+SRCS = inszt_Cashregister.c inszt_Main.c inszt_Productdatabase.c inszt_Specialoffer.c inszt_Userinterface.c 
+OBJS = inszt_Cashregister.o inszt_Main.o inszt_Productdatabase.o inszt_Specialoffer.o inszt_Userinterface.o 
 DEPS = Cashregister.d Main.d Productdatabase.d Specialoffer.d Userinterface.d 
 
 ifdef ComSpec
