@@ -137,7 +137,7 @@ def findAllSourceCode(SourceMatches):
 def createTCF(SourceMatches, HeaderMatches):
     tcfName= SystemTesting+'.tcf'
     f = open(sourceRoot+tcfName,'w+')
-    f.write('# Begin Testbed  Set \n')
+    f.write('\n # Begin Testbed  Set \n')
     f.write('\n SET_TYPE = SYSTEM')
     f.write('\n SET_NAME = SystemTesting\n')
     f.write('\n   #Begin Source Files\n\n')
