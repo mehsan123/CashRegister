@@ -150,7 +150,7 @@ def createTCF(SourceMatches, HeaderMatches):
     
     f.write('\n    # Begin Sysppvar Preprocessor Macros\n')
     f.write('\n    # End Sysppvar Preprocessor Macros\n')
-    
+    f.write('\n # End Testbed Set\n')    
     f.write('\n    # Begin Options\n\n')
     #f.write('\n   sysearch = F:\\LDRA\\sysearch_system.dat')
     f.write('\n    set_attributes = 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')
@@ -158,7 +158,7 @@ def createTCF(SourceMatches, HeaderMatches):
     f.write('\n    include = T')
     f.write('\n    set_property = 1')
     f.write('\n\n    # End Options\n')
-    f.write('\n # End Testbed Set\n')
+
 
     f.close()
     return tcfName
