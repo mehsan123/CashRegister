@@ -92,7 +92,7 @@ def main():
     #dynamicJsonFormatter(tcfName)
     #xmltojson (WORKAREA+'Coverage.xml',WORKAREA+'coverage.json')
     xmltojson (workarearoot+tcfName[-17:-4]+"_dyn.xml",workarearoot+tcfName[-17:-4]+'_dyn.json')
-    junit_creator(tcfName)
+    #junit_creator(tcfName)
     #junit_creator()
     
     
