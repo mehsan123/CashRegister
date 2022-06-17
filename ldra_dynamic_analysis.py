@@ -176,7 +176,7 @@ def runanalysis(tcfName):
     command1=sourceRoot+'Clean.bat '+sourceRoot
     os.system(command1)
     
-    command2 = '{}contestbed.exe {}{} /112n34021q -reanalyse_changed_set -generate_code_review=HTML -tb_workfiledir={} -build_cmd="Build.bat" -startin_dir={} -auto_macro -auto_macro_value="0" -exhdir={}'.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, sourceRoot, projectDir) #pass ptf as parameter
+    command2 = '{}contestbed.exe {}{} /run_required_dynamic  -reanalyse_changed_set -generate_code_review=HTML -tb_workfiledir={} -build_cmd="Build.bat" -startin_dir={} -auto_macro -auto_macro_value="0" -exhdir={}'.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, sourceRoot, projectDir) #pass ptf as parameter
     os.system(command2)
     
     command4=sourceRoot+'Build.bat '+sourceRoot 
