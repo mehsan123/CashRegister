@@ -156,7 +156,7 @@ def createTCF(SourceMatches, HeaderMatches):
     f.write('\n    set_attributes = 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')
     f.write('\n    open_all_includes = T')
     f.write('\n    include = T')
-    f.write('\n    # End Options')
+    f.write('\n\n    # End Options\n\n')
     f.write('\n # End Testbed Set\n')
 
     f.close()
