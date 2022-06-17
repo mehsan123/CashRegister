@@ -144,7 +144,7 @@ def createTCF(SourceMatches, HeaderMatches):
     f.write('\n'.join (SourceMatches))
     f.write('\n\n    # End Source Files\n')
     f.write('\n    # Begin Sysearch Include File Entries\n')
-    f.write('\n'.join(HeaderMatches))
+    #f.write('\n'.join(HeaderMatches))
     #f.write('\nInsertInclude_203 = $(LDRA_CONFIG_ROOT)\LdraSystemHeaders.h\n')
     f.write('\n    # End Sysearch Include File Entries\n')
     
@@ -157,7 +157,7 @@ def createTCF(SourceMatches, HeaderMatches):
     f.write('\n    open_all_includes = T')
     f.write('\n    include = T')
     f.write('\n    set_property = 1')
-    f.write('\n\n    # End Options\n\n')
+    f.write('\n\n    # End Options\n')
     f.write('\n # End Testbed Set\n')
 
     f.close()
