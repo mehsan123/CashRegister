@@ -102,10 +102,10 @@ def main():
 ######################################################################################
 def init():
     global sourceRoot, toolsuiteroot, workarearoot, projectDir
-    sourceRoot = sys.argv[1]
-    toolsuiteroot = sys.argv[2]
-    workarearoot = sys.argv[3]
-    projectDir =  sys.argv[4]
+    sourceRoot = sys.argv[1]+"\\"
+    toolsuiteroot = sys.argv[2]+'\\'
+    workarearoot = sys.argv[3]+'\\'
+    projectDir =  sys.argv[4]+'\\'
     print('Source Root: '+sourceRoot)
     print('TOOLSUITE ROOT: ROOT: '+toolsuiteroot)
     print('WORKAREA ROOT: '+sourceRoot)
@@ -135,8 +135,8 @@ def findAllSourceCode(SourceMatches):
 # This function will create a TCF file
 ######################################################################################
 def createTCF(SourceMatches, HeaderMatches):
-    tcfName= sourceRoot+'\\'+SystemTesting+'.tcf'
-    f = open(sourceRoot+SystemTesting+'.tcf','w+')
+    tcfName= SystemTesting+'.tcf'
+    f = open(sourceRoot+tcfName,'w+')
     f.write('# Begin Testbed  Set \n')
     f.write('\n   SET_TYPE = SYSTEM ')
     f.write('\n   SET_NAME = SystemTesting\n')
@@ -173,13 +173,13 @@ def runanalysis(tcfName):
     #-continue_system_analysis continues analysis even if a file fails analysis
     #-generate_code_review=HTML force generation of HTML code review report.
     os.system('dir')
-    command1=sourceRoot+'\Clean.bat '+sourceRoot
+    command1=sourceRoot+'Clean.bat '+sourceRoot
     os.system(command1)
     
-    command2 = '{}contestbed.exe {} /112n34021q -reanalyse_changed_set -generate_code_review=HTML -tb_workfiledir={} -build_cmd="Build.bat" -startin_dir="D:\AzureDevOps\Cashregister_6.0\Source" -auto_macro -auto_macro_value="0" -exhdir={}'.format(toolsuiteroot,tcfName, workarearoot, projectDir) #pass ptf as parameter
+    command2 = '{}contestbed.exe {} /112n34021q -reanalyse_changed_set -generate_code_review=HTML -tb_workfiledir={} -build_cmd="Build.bat" -startin_dir={} -auto_macro -auto_macro_value="0" -exhdir={}'.format(toolsuiteroot,tcfName, workarearoot, sourceRoot, projectDir) #pass ptf as parameter
     os.system(command2)
     
-    command4=sourceRoot+'\Build.bat '+sourceRoot 
+    command4=sourceRoot+'Build.bat '+sourceRoot 
     os.system(command4)
     
 
@@ -190,7 +190,7 @@ def runanalysis(tcfName):
     os.system(command5)
     
     
-    command6 = '{}integration_util.exe /arg=3 /1={}\Result.xml /2={} /3='.format(toolsuiteroot,workarearoot, workarearoot+tcfName[-17:-4]+'.ldra')
+    command6 = '{}integration_util.exe /arg=3 /1={}Result.xml /2={} /3='.format(toolsuiteroot,workarearoot, workarearoot+tcfName[-17:-4]+'.ldra')
     os.system(command6)
     #Dynamic Analysis
     print('TCF Name is: '+tcfName)
@@ -203,7 +203,7 @@ def runanalysis(tcfName):
     
     
     print('TCF Name is:'+tcfName[len(tcfName):-4])
-    command8 = '{}integration_util.exe /arg=0 /1={}\{}.xml /2={} '.format(toolsuiteroot,workarearoot,tcfName[-17:-4]+'_dyn',workarearoot+tcfName[-17:-4]+'.ldra')
+    command8 = '{}integration_util.exe /arg=0 /1={}{}.xml /2={} '.format(toolsuiteroot,workarearoot,tcfName[-17:-4]+'_dyn',workarearoot+tcfName[-17:-4]+'.ldra')
     os.system(command8)
 
 def parseXml(tcfName):
