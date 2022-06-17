@@ -203,7 +203,7 @@ def runanalysis(tcfName):
     print('Project Directory is: '+projectDir)
     
     
-    command7 = '{}contestbed.exe {}{} /312panq  -tb_workfiledir={} -exhdir={} '.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, projectDir) #pass ptf as parameter
+    command7 = '{}contestbed.exe {}{} /32panq  -tb_workfiledir={} -exhdir={} '.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, projectDir) #pass ptf as parameter
     
     os.system(command7)
     print('Dynamic Coverage is finished')
