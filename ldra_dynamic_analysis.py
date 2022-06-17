@@ -176,7 +176,7 @@ def runanalysis(tcfName):
     command1=sourceRoot+'Clean.bat '+sourceRoot
     os.system(command1)
     
-    command2 = '{}contestbed.exe {}{} /run_required_dynamic  -reanalyse_changed_set -generate_code_review=HTML -tb_workfiledir={} -build_cmd="Build.bat" -startin_dir={} -auto_macro -auto_macro_value="0" -exhdir={}'.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, sourceRoot, projectDir) #pass ptf as parameter
+    command2 = '{}contestbed.exe {}{} /112a340212panq  -create_set=SYSTEM -reanalyse_changed_set -generate_code_review=HTML -tb_workfiledir={} -build_cmd="Build.bat" -startin_dir={} -auto_macro -auto_macro_value="0" -exhdir={}'.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, sourceRoot, projectDir) #pass ptf as parameter
     os.system(command2)
     
     command4=sourceRoot+'Build.bat '+sourceRoot 
@@ -197,7 +197,7 @@ def runanalysis(tcfName):
     print('Project Directory is: '+projectDir)
     
     
-    command7 = '{}contestbed.exe {}{} /-run_required_dynamic  -tb_workfiledir={} -exhdir={} '.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, projectDir) #pass ptf as parameter
+    command7 = '{}contestbed.exe {}{} /312panq  -tb_workfiledir={} -exhdir={} '.format(toolsuiteroot,sourceRoot,tcfName, workarearoot, projectDir) #pass ptf as parameter
     
     os.system(command7)
     print('Dynamic Coverage is finished')
