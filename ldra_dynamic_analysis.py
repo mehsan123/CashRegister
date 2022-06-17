@@ -92,7 +92,7 @@ def main():
     #dynamicJsonFormatter(tcfName)
     #xmltojson (WORKAREA+'Coverage.xml',WORKAREA+'coverage.json')
     xmltojson (workarearoot+tcfName[-17:-4]+"_dyn.xml",workarearoot+tcfName[-17:-4]+'_dyn.json')
-    junit_creator(tcfName)
+    #junit_creator(tcfName)
     #junit_creator()
     
     
@@ -102,7 +102,7 @@ def main():
 ######################################################################################
 def init():
     global sourceRoot, toolsuiteroot, workarearoot, projectDir
-    sourceRoot = sys.argv[1]+"\\"
+    sourceRoot = sys.argv[1]+'\\'
     toolsuiteroot = sys.argv[2]+'\\'
     workarearoot = sys.argv[3]+'\\'
     projectDir =  sys.argv[4]+'\\'
