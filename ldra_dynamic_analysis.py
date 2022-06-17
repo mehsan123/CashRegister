@@ -197,7 +197,7 @@ def runanalysis(tcfName):
     print('Project Directory is: '+projectDir)
     
     
-    command7 = '{}contestbed.exe {} /32faya  -tb_workfiledir={} -exhdir={} '.format(toolsuiteroot,tcfName, workarearoot, projectDir) #pass ptf as parameter
+    command7 = '{}contestbed.exe {}{} /32faya  -tb_workfiledir={} -exhdir={} '.format(toolsuiteroot,workarearoot,tcfName, workarearoot, projectDir) #pass ptf as parameter
     
     os.system(command7)
     
