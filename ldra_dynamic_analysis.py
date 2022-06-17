@@ -150,6 +150,7 @@ def createTCF(SourceMatches, HeaderMatches):
     f.write('\n   # Begin Options')
     f.write('\n   open_all_includes = True')
     #f.write('   sysearch = F:\\LDRA\\sysearch_system.dat')
+    f.write('\n   set_attributes = 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0')
     f.write('\n   include = True')
     f.write('\n   # End Options')
     f.write('\n # End Testbed Set\n')
