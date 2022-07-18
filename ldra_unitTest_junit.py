@@ -308,11 +308,12 @@ def parseDescription (sourceRoot):
             if(l[3].isnumeric()):
                 flag1 =1
                 testNo=l[3]
-            
         if flag1 ==1:
             if ('Description' in str(line)):
                 l= testCaseTrim(str(line))
-                testCases[int(testNo)].setTCDescription(l[1:])
+                print(testNo)
+                print(l)
+                testCases[int(testNo)-1].setTCDescription(l[1:])
                 flag1 =0
     for i in testCases:
         print(i.getTCDescription())
