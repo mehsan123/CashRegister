@@ -61,11 +61,9 @@ class LDRA_TestCase():
         return (self.TCSeq)     
 
     def getTCDescription(self):
-        if (self.TCDescription != None) or ( self.TCDescription  != ' '):
-            self.TCDescription = 'Not Applicable'
-            return(self.TCDescription)
-        else:
-            return (self.TCDescription)        
+        return (self.TCDescription) 
+        
+               
     
     def setTCNo(self):
         self.TCNo = TCNo
@@ -94,6 +92,10 @@ class LDRA_TestCase():
     def setTCSeq(self):
         self.TCSeq = TCSeq     
         
+    def setTCDescription(self,TCDescription):
+        self.TCDescription = TCDescription 
+        print(self.TCDescription)
+        
     
         
 ######################################################################################
@@ -111,6 +113,9 @@ def arrayTrim(line):
     l=[]
     l = str(line).split(" ")
     l2=[]
+    l3=''
+    l[0]=l[0][l[0].find("'")+1:] #removing the first b' at the beginning of everyline
+    
     for i in l:
         if i != '':
             if i != ' ':
@@ -118,6 +123,22 @@ def arrayTrim(line):
                     l2.append(i[:-5])
                 else:
                     l2.append(i)
+    if ('ordering' in l2):
+        l2[l2.index('FAIL')]= l2[l2.index('FAIL')]+' ' + l2[l2.index('stub')]+' ' + l2[l2.index('ordering')]
+        l2.remove('ordering')
+        l2.remove('stub')
+    if ('hit' in l2):
+        l2[l2.index('FAIL')]= l2[l2.index('FAIL')]+' '+l2[l2.index('stub')]+' '+ l2[l2.index('hit')]+' '+l2[l2.index('count')]
+        l2.remove('stub')
+        l2.remove('hit')
+        l2.remove('count')
+    if ('VALIDATION' in l2):
+        l2[l2.index('FAILED')]= l2[l2.index('FAILED')]+' '+l2[l2.index('VALIDATION')]
+        l2.remove('VALIDATION')
+        
+    if ('Case' in l2 and 'Procedure' in l2):
+        l2[l2.index('Test')]= l2[l2.index('Test')]+' '+l2[l2.index('Case')]
+        l2.remove('Case')
     return l2
 
 
@@ -135,33 +156,67 @@ def parseThr(sourceRoot):
         if "Set :" in str(line):    
             l=str(line).split(" ")
             setName = l[l.index(":")+1]
-            print(setName)
+            print('Set Name is: '+setName)
 
+        if "Set:" in str(line):    
+            print('Set Nameee')
+            l=str(line).split(" ")
+            while("" in l) :
+                l.remove("")
+            setName = l[l.index("Set:")+1][:-5]
+            print('Set Name is: '+setName)       
+            
+    
         if "Sequence :" in str(line):    
             l=str(line).split(" ")
             seqName = l[l.index(":")+1]
-            print(seqName)
+            print('Sequence Name is: '+seqName)
+            
+        
+        if "Sequence" in str(line):    
+            l=str(line).split(" ")
+            while("" in l) :
+                l.remove("")
+            l[0]=l[0][l[0].find("'")+1:]
+            seqName = l[l.index("Sequence")+1]
+            print('Sequence Name is: '+seqName)
             
         if "Test Case Regression Summary Table" in str(line):
             flag1 = 1
             print("flag is :",flag1)
+            
+        if "Test Case 1 :" in str(line) or 'Test Case 1 :' in str(line) :
+            print(line)
+            flag1 = 0
+            flag2 = 0
+            #print("flag is :",flag1)
+            break
+            
         
         if flag1 == 1 :
             l2=[]
             l2=arrayTrim(line)
             if "INPUTS" in l2:
-                print('TITLE')
-                flag2=1
+                print('TITLE found')
                 tcNoCol     = l2.index('TEST')
                 tcProcCol   = l2.index('PROCEDURE')-1
                 tcFileCol   = l2.index('FILE')-1
                 tcInCol     = l2.index('INPUTS')-4
                 tcOutCol    = l2.index('OUTPUTS')-4
                 tcStatusCol = l2.index('STATUS')-4
-                print(l2)
                 print("Columns are: ", tcNoCol, tcProcCol, tcFileCol, tcInCol, tcOutCol, tcStatusCol, ' ')
                 flag2=1
-                
+            if ("Test Case" in l2) and ("Suspended%"in l2):
+                print('Harness Text Report')
+                print(l2)
+                tcNoCol     = l2.index('Test Case')
+                tcProcCol   = l2.index('Procedure')
+                tcFileCol   = l2.index('File')
+                tcInCol     = l2.index('Inputs')
+                tcOutCol    = l2.index('Outputs')
+                tcStatusCol = l2.index('Status')
+                print("Columns are: ", tcNoCol, tcProcCol, tcFileCol, tcInCol, tcOutCol, tcStatusCol, ' ')
+                flag2=1
                 
         if flag1 ==1 and flag2 == 1 :
             l2=[] 
@@ -171,16 +226,18 @@ def parseThr(sourceRoot):
             #print(len(l2))
             
             if len(l2)>3:
-                if l2[tcNoCol] != '=':
+                if l2[tcNoCol] != '=' or l2[tcNoCol] != '-' :
                     if 'TEST' not in l2:
-                        if '*' not in l2:
+                        if '*' not in l2 or '=' not in l2:
                         
-                            if ('PASS' in l2 or 'FAIL' in l2 ):
-                                #print(l2)
+                            if ('PASS' in l2 or 'FAIL' in l2 or 'FAIL stub ordering' in l2 or 'FAILED VALIDATION' in l2 or 'FAIL stub hit count' in l2):
                                 #f2.write("The rest are "+' ' +l2[tcInCol]+ ' ' +l2[tcOutCol]+ ' '+l2[tcStatusCol]+'\n')
+                                
                                 testInput = l2[tcInCol]
                                 testOut = l2[tcOutCol]
-                                
+                                testCaseNo=l2[tcNoCol]
+                                testCasefile = l2[tcFileCol]
+                                testCaseproc = l2[tcProcCol]
                                 testStatus = l2[tcStatusCol]
                                 testCases.append(LDRA_TestCase(testCaseNo, testCasefile, testCaseproc,testInput, testOut, testStatus,setName,seqName,' '  ))
                                 f2.write(testCaseNo+' '+testCasefile+' '+ testCaseproc+' '+testInput+' '+ testOut+' '+ testStatus+' '+setName+' '+seqName+'\n')
@@ -199,6 +256,7 @@ def parseThr(sourceRoot):
                                 testCaseproc= l2[tcProcCol]
             
             elif len(l2) == 3:
+                print('length is 3')
                 print(l2)                    
                 l2=[]
                 l2=arrayTrim(line)
@@ -221,35 +279,50 @@ def parseThr(sourceRoot):
                 testCasefile = l2[tcNoCol]
                 
             
+def testCaseTrim(line):
+    l=[]
+    l = str(line).split(" ")
+    l2=[]
+    l3=''
+    l[0]=l[0][l[0].find("'")+1:] #removing the first b' at the beginning of everyline
+    
+    for i in l:
+        if i != '':
+            if i != ' ':
+                if l.index(i) == (len(l)-1):  
+                    l2.append(i[:-5])
+                else:
+                    l2.append(i)
 
-                    
-            
-        if "Test Case 1 :" in str(line):
-
-            flag1 = 0
-            flag2 = 0
-            #print("flag is :",flag1)
-            break
-            
-            
-def parseError(sourceRoot):
-    failed_testCases =[]
+    return l2
+def parseDescription (sourceRoot):                    
     f=open(sourceRoot,'rb')
-    flag_failure =0
-    for i in testCases:
-        if i.getTCStatus() == 'FAIL':
-            failed_testCases.append('*  Test Case '+i.getTCNo())
-            
+    l=''
+    flag1=0
+    TCNo=[]
+    for test in testCases:
+        TCNo.append(test.getTCNo())
     for line in f:
-        for member in failed_testCases:
-            if member in str(line):
-                print(line)
-                flag_failure = 1
-        if 'Test Execution Output' in str(line):
-            if flag_failure == 1:
-                flag_failure =0
-                print(line)
-################################################################################################################################################
+        if ("=== Test Case"  in str(line)):
+            l= testCaseTrim(str(line))
+            if(l[3].isnumeric()):
+                flag1 =1
+                testNo=l[3]
+            
+        if flag1 ==1:
+            if ('Description' in str(line)):
+                l= testCaseTrim(str(line))
+                testCases[int(testNo)].setTCDescription(l[1:])
+                flag1 =0
+    for i in testCases:
+        print(i.getTCDescription())
+                
+                
+            
+
+            
+##############################################################################
+##################################################################
 #'''<?xml version="1.0" encoding="UTF-8" ?>                                                                                                     # 
 #   <testsuites id="20140612_170519" name="New_configuration (14/06/12 17:05:19)" tests="225" failures="1262" time="0.001">                     #
 #      <testsuite id="codereview.cobol.analysisProvider" name="COBOL Code Review" tests="45" failures="17" time="0.001">                        #
@@ -287,6 +360,7 @@ def junit_generator():
     time=time.replace('-','')
     print("Today's date:", time)
     for i in testCases:
+        testDiscription = i.getTCDescription()
         testCaseNo = i.getTCNo()
         testCaseNo='Test Case '+ str(testCaseNo)
         testCasefile = i.getTCFile()
@@ -296,7 +370,7 @@ def junit_generator():
         testStatus = i.getTCStatus()
         setName = i.getTCSet()
         seqName = i.getTCSeq()
-        jtest_cases.append(TestCase(testCaseNo,testCaseproc,int(today),testCasefile, testStatus))
+        jtest_cases.append(TestCase(testCaseNo,testCaseproc,int(today),testDiscription, testStatus))
     ts = [TestSuite(setName, jtest_cases)]
     with open ("junit.junit", mode='w') as f :
         TestSuite.to_file(f, ts)   
@@ -319,7 +393,8 @@ def main()  :
     html_parser()  
     parseThr(sourceRoot)
     junit_generator()
-    parseError(sourceRoot)
+    #parseError(sourceRoot)
+    parseDescription(sourceRoot)
 
 if __name__ == "__main__":
     main()
