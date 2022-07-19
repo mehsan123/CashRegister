@@ -393,7 +393,7 @@ def junit_generator(testCases,sourceRoot):
         seqName = i.getTCSeq()
         jtest_cases.append(TestCase(testCaseNo,testCaseproc,int(today),testDiscription, testStatus))
     ts = [TestSuite(setName, jtest_cases)]
-    with open (sourceRoot+".junit", mode='w') as f :
+    with open (sourceRoot+".xml", mode='w') as f :
         TestSuite.to_file(f, ts)   
     f.close()
         
