@@ -7,7 +7,7 @@ set BUILD_DIR=%5
 echo hi
 %TOOL%\\contestbed.exe -112a34 %BUILD_DIR%%TCF_NAME%.tcf
 
-echo %TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf=%BUILD_DIR%\\%SEQ%.tcf -unit_publish_to="%PUBLISH%" -box=black -regress -quit
-rem %TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf="%BUILD_DIR%\%SEQ%.tcf" -unit_publish_to="%PUBLISH%" -box=black -regress -quit
+%TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf=%BUILD_DIR%\\%SEQ%.tcf -box=black -regress -quit -unit_publish_to="%PUBLISH%" 
+rem %TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf="%BUILD_DIR%\%SEQ%.tcf" -unit_publish_to="%PUBLISH%" -box=black -regress -quit 
 
 ldra_unitTest_junit.py %PUBLISH%
