@@ -6,11 +6,11 @@
  
    # Begin Source Files
  
-      File = C:\_LDRA_Workarea\988_RC1\Examples\Toolsuite\Cashregister_5.0\Src\Cashregister.c 
-      File = C:\_LDRA_Workarea\988_RC1\Examples\Toolsuite\Cashregister_5.0\Src\Main.c 
-      File = C:\_LDRA_Workarea\988_RC1\Examples\Toolsuite\Cashregister_5.0\Src\Productdatabase.c 
-      File = C:\_LDRA_Workarea\988_RC1\Examples\Toolsuite\Cashregister_5.0\Src\Specialoffer.c 
-      File = C:\_LDRA_Workarea\988_RC1\Examples\Toolsuite\Cashregister_5.0\Src\Userinterface.c 
+      File = .\Cashregister.c 
+      File = .\Main.c 
+      File = .\Productdatabase.c 
+      File = .\Specialoffer.c 
+      File = .\Userinterface.c 
  
    # End Source Files
  
