@@ -141,9 +141,26 @@ def arrayTrim(line):
         l2.remove('Case')
     return l2
 
-
-    
+def findFiles(sourceRoot):
+    print("Finding THR files...",sourceRoot)
+    fileName = []
+    for r, d, f in os.walk(sourceRoot):
+        for item in f:
+            if item.endswith(".thr.txt"):
+                print("Found THR File",item)
+                fileNamePath = str(os.path.join(r,item))
+                fileName.append(fileNamePath)
+    if len(fileName) ==0 :
+        print("No THR file has been found!")
+        
+    else:
+        for i in fileName:
+            print("fileName",i)
+            parseThr(str(i))
+        
 def parseThr(sourceRoot):
+    print("Parsing the file name: ",sourceRoot)
+    testCases=[]
     f=open(sourceRoot,'rb')
     print(sourceRoot)
 
@@ -277,7 +294,10 @@ def parseThr(sourceRoot):
 
                 #f2.write("Tests are 2::: "+l2[tcNoCol]+'\n')
                 testCasefile = l2[tcNoCol]
-                
+    
+    #parseError(sourceRoot)
+    parseDescription(sourceRoot)
+    junit_generator(testCases,sourceRoot)
             
 def testCaseTrim(line):
     l=[]
@@ -311,7 +331,7 @@ def parseDescription (sourceRoot):
         if flag1 ==1:
             if ('Description' in str(line)):
                 l= testCaseTrim(str(line))
-                print(testNo)
+                print("Discription found in Test Case:",testNo)
                 print(l)
                 testCases[int(testNo)-1].setTCDescription(l[1:])
                 flag1 =0
@@ -352,7 +372,7 @@ def parseDescription (sourceRoot):
 #    print(TestSuite.to_xml_string(ts)))'''                                                                                                     #
 #################################################################################################################################################
 
-def junit_generator():
+def junit_generator(testCases,sourceRoot):
     jtest_cases=[]
     today = datetime.datetime.now()
     today=today.strftime("%H%M")
@@ -373,7 +393,7 @@ def junit_generator():
         seqName = i.getTCSeq()
         jtest_cases.append(TestCase(testCaseNo,testCaseproc,int(today),testDiscription, testStatus))
     ts = [TestSuite(setName, jtest_cases)]
-    with open ("junit.junit", mode='w') as f :
+    with open (sourceRoot+".junit", mode='w') as f :
         TestSuite.to_file(f, ts)   
     f.close()
         
@@ -392,10 +412,9 @@ def textParser(textStart, textEnd):
     
 def main()  : 
     html_parser()  
-    parseThr(sourceRoot)
-    junit_generator()
-    #parseError(sourceRoot)
-    parseDescription(sourceRoot)
+    findFiles(sourceRoot)
+
+
 
 if __name__ == "__main__":
     main()
