@@ -3,9 +3,10 @@ set TCF_NAME=%2
 set PUBLISH=%3
 set SEQ=%4
 set BUILD_DIR=%5
-
+echo %PUBLISH%
+echo %BUILD_DIR%
 echo hi
-%TOOL%\\contestbed.exe -delete_set %TCF_NAME%.tcf
+
 %TOOL%\\contestbed.exe -112a34  %BUILD_DIR%%TCF_NAME%.tcf -tb_workfiledir="%PUBLISH%" 
 
 %TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf=%BUILD_DIR%\\%SEQ%.tcf -box=white -regress -quit -unit_publish_to="%PUBLISH%" 
