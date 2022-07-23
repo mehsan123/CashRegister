@@ -1,7 +1,7 @@
 # Begin Testbed Set
  
    SET_TYPE = SYSTEM
-   SET_NAME = Cashregister_5
+   SET_NAME = Cashregister
    GENERATED_BY = SCRIPT
  
    # Begin Source Files
