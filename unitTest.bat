@@ -14,7 +14,7 @@ echo hi
 
 %TOOL%\\Contbrun.exe "%TCF_NAME%" -tcf="%BUILD_DIR%\%SEQ%.tcf" -box=white -regress -quit -unit_publish_to="%PUBLISH%\"
 
-rem %TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf="%BUILD_DIR%\%SEQ%.tcf" -unit_publish_to="%PUBLISH%" -box=black -regress -quit 
+rem %TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf="%BUILD_DIR%\%SEQ%.tcf"  -box=white -regress -quit -unit_publish_to="%PUBLISH%"
 
 ldra_unitTest_junit.py "%PUBLISH%\"
 
