@@ -16,6 +16,7 @@ echo hi
 rem %TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf="%BUILD_DIR%\%SEQ%.tcf" -unit_publish_to="%PUBLISH%" -box=black -regress -quit 
 
 ldra_unitTest_junit.py "%PUBLISH%\"
+LDRA_JACOCO_DYNAMIC.py "%TOOL%\" "%PUBLISH%\"
 
 %TOOL%\\contestbed.exe -32panq  %BUILD_DIR%%TCF_NAME%.tcf -tb_workfiledir="%PUBLISH%\" 
 rem %TOOL%\\tbini WORKAREA_BASEDIR=C:\_LDRA_Workarea\1003\
