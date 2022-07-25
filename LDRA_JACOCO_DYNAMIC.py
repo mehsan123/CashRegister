@@ -101,7 +101,7 @@ def findFiles(workarearoot,format):
     for r, d, f in os.walk(workarearoot):
         for item in f:
             if item.endswith(format):
-                if item != "context.ldra":
+                if item != "contents.ldra":
                     print("Found "+format+" File",item)
                     fileNamePath = str(os.path.join(r,item))
                     fileName.append(fileNamePath)
@@ -146,9 +146,13 @@ def runanalysis(workarearoot):
 
     
 def sendXml(tcfName):
-    xml_file = ET.parse(tcfName)
+    if len(tcfName) != 0:
+        xml_file = ET.parse(tcfName)
     
-    return(xml_file)
+        return(xml_file)
+        
+    else:
+        print("Bad XML File")
     
 def parseXml(xml_file):
     
