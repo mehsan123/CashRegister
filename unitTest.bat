@@ -21,6 +21,6 @@ ldra_unitTest_junit.py "%PUBLISH%"
 
 LDRA_JACOCO_DYNAMIC.py "%TOOL%\" "%PUBLISH%"
  
-%TOOL%\\tbini WORKAREA_BASEDIR=C:\_LDRA_Workarea\1003\
-%TOOL%\\tbini PERMDIR=C:\_LDRA_Workarea\1003\permdir\
+rem %TOOL%\\tbini WORKAREA_BASEDIR=C:\_LDRA_Workarea\1003\
+rem %TOOL%\\tbini PERMDIR=C:\_LDRA_Workarea\1003\permdir\
 rem unitTest.bat "..\..\_tool\1003\" Cashregister D:\AZAjent\vsts-agent-win-x64-2.206.1\_work\1\s\Ehsan\ ut_addProduct D:\AZAjent\vsts-agent-win-x64-2.206.1\_work\1\s\
