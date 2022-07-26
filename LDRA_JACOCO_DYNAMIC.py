@@ -197,7 +197,7 @@ def jacocoWriter(jacocoFile):
     file_name=''
     jfile= open(jacocoFile,mode='w')
     jfile.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n')
-    jfile.write('<!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.0//EN" "report.dtd">\n')
+    #jfile.write('<!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.0//EN" "report.dtd">\n')
     jfile.write('<report name="'+jacocoFile[:-20]+'">\n')
     jfile.write('  <sessioninfo id="unknownhost-TBD" start="0000000000000" dump="0000000000000"/>\n')
     jfile.write('  <package name="'+jacocoFile[:-20]+'">\n')
