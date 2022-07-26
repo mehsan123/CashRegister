@@ -17,9 +17,9 @@ echo hi
 
 rem %TOOL%\\Contbrun.exe %TCF_NAME%.tcf -tcf="%BUILD_DIR%\%SEQ%.tcf"  -box=white -regress -quit -unit_publish_to="%PUBLISH%"
 
-ldra_unitTest_junit.py "%PUBLISH%"
+ldra_unitTest_junit.py %PUBLISH%
 
-LDRA_JACOCO_DYNAMIC.py "%TOOL%\" "%PUBLISH%"
+LDRA_JACOCO_DYNAMIC.py %TOOL% %PUBLISH%
  
 rem %TOOL%\\tbini WORKAREA_BASEDIR=C:\_LDRA_Workarea\1003\
 rem %TOOL%\\tbini PERMDIR=C:\_LDRA_Workarea\1003\permdir\
