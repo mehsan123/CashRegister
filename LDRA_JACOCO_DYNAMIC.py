@@ -204,7 +204,7 @@ def parseXml(xml_file):
 def jacocoWriter(jacocoFile):
     file_name=''
     jfile= open(jacocoFile,mode='w')
-    jfile.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n')
+    jfile.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
     #jfile.write('<!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.0//EN" "report.dtd">\n')
     jfile.write('<report name="'+jacocoFile[:-20]+'">\n')
     jfile.write('  <sessioninfo id="unknownhost-TBD" start="0000000000000" dump="0000000000000"/>\n')
@@ -212,7 +212,22 @@ def jacocoWriter(jacocoFile):
     flag_file = 0
     flag_proc =0
     print(file_coverage)
+    coverage_array=[]
+    count = 0
     for i in file_coverage:
+        if i.getcovType() == 'Statement Coverage':
+            coverage_array.append('LINE')
+        elif i.getcovType() == 'Branch/Decision Coverage':
+            coverage_array.append('BRANCH')
+        elif i.getcovType() == 'Modified Condition / Decision Coverage':
+            coverage_array.append('COMPLEXITY')
+        elif  i.getcovType() == 'Not Applicable' :
+            print('?????')
+        else: 
+            print('Not Found')
+    for i in file_coverage:
+    
+        count = count + 1
         
         if i.getcovElementType() == 'File Coverage' and flag_file ==0:
             flag_file = 0
@@ -221,9 +236,9 @@ def jacocoWriter(jacocoFile):
             if i.getcovType() =='Statement Coverage':
                 jfile.write('    <sourcefile name="'+file_name+'">\n')
             if i.getcovStatus() !="Not Applicable":
-                jfile.write('      <counter type="'+i.getcovType()+'" missed="'+str(i.getreqCov())+'" covered="'+str(i.getcovLines())+'"/>\n')
+                jfile.write('      <counter type="'+coverage_array[count-1]+'" missed="'+str(i.getreqCov())+'" covered="'+str(i.getcovLines())+'"/>\n')
             else:
-                jfile.write('      <counter type="'+i.getcovType()+'" missed="0" covered="0"/>\n')
+                jfile.write('      <counter type="'+coverage_array[count-1]+'" missed="0" covered="0"/>\n')
                 
             if i.getcovType() =='Modified Condition / Decision Coverage':
                 jfile.write('    </sourcefile>\n')            
@@ -233,22 +248,22 @@ def jacocoWriter(jacocoFile):
             flag_file = flag_file +  1 # In order to close the node for the file name 
             jfile.write('    <class name="'+file_name+'">\n')
             if i.getcovType() =='Statement Coverage':
-                jfile.write('      <method name="'+i.getcovElementName()+'" desc="'+i.getcovStatus()+'" line="'+str(i.getcovLines())+'">\n')
+                jfile.write('      <method name="'+i.getcovElementName()+'" desc="'+coverage_array[count-1]+'" line="'+str(i.getcovLines())+'">\n')
 
             if i.getcovStatus() !="Not Applicable":
-                jfile.write('        <counter type="'+i.getcovType()+'" missed="'+str(i.getreqCov())+'" covered="'+str(i.getcovLines())+'"/>\n')
+                jfile.write('        <counter type="'+coverage_array[count-1]+'" missed="'+str(i.getreqCov())+'" covered="'+str(i.getcovLines())+'"/>\n')
             else:
-                jfile.write('      <counter type="'+i.getcovType()+'" missed="0" covered="0"/>\n')
+                jfile.write('      <counter type="'+coverage_array[count-1]+'" missed="0" covered="0"/>\n')
                 
         elif i.getcovElementType() == 'Procedure Coverage' and flag_proc ==0:
             flag_proc = 0
             flag_file = flag_file +  1 # In order to close the node for the file name
             if i.getcovType() =='Statement Coverage':
-                jfile.write('      <method name="'+i.getcovElementName()+'" desc="'+i.getcovStatus()+'" line="'+str(i.getcovLines())+'">\n')
+                jfile.write('      <method name="'+i.getcovElementName()+'" desc="'+coverage_array[count-1]+'" line="'+str(i.getcovLines())+'">\n')
             if i.getcovStatus() !="Not Applicable":
-                jfile.write('        <counter type="'+i.getcovType()+'" missed="'+str(i.getreqCov())+'" covered="'+str(i.getcovLines())+'"/>\n')
+                jfile.write('        <counter type="'+coverage_array[count-1]+'" missed="'+str(i.getreqCov())+'" covered="'+str(i.getcovLines())+'"/>\n')
             else:
-                jfile.write('        <counter type="'+i.getcovType()+'" missed="0" covered="0"/>\n')
+                jfile.write('        <counter type="'+coverage_array[count-1]+'" missed="0" covered="0"/>\n')
             
             if i.getcovType() =='Modified Condition / Decision Coverage':
                 jfile.write('      </method>\n')
@@ -262,9 +277,9 @@ def jacocoWriter(jacocoFile):
                 jfile.write('    <sourcefile name="'+file_name+'">\n')
       
             if i.getcovStatus() !="Not Applicable":
-                jfile.write('      <counter type="'+i.getcovType()+'" missed="'+str(i.getreqCov())+'" covered="'+str(i.getcovLines())+'"/>\n')
+                jfile.write('      <counter type="'+coverage_array[count]+'" missed="'+str(i.getreqCov())+'" covered="'+str(i.getcovLines())+'"/>\n')
             else:
-                jfile.write('      <counter type="'+i.getcovType()+'" missed="0" covered="0"/>\n')
+                jfile.write('      <counter type="'+coverage_array[count]+'" missed="0" covered="0"/>\n')
     jfile.write('  </package>\n')
     jfile.write('</report>')        
 
