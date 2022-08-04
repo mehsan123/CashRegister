@@ -74,6 +74,7 @@ class CoverageElement():
 def main():
     init()
     runanalysis(workarearoot)
+    coverage_calculator()
     
     
 ######################################################################################
@@ -97,6 +98,7 @@ def init():
 ######################################################################################
 def findFiles(workarearoot,format):
     print("Finding "+format+ " files...",workarearoot)
+    fileName_with_path = []
     fileName = []
     for r, d, f in os.walk(workarearoot):
         for item in f:
@@ -104,14 +106,15 @@ def findFiles(workarearoot,format):
                 if item != "contents.ldra":
                     print("Found "+format+" File",item)
                     fileNamePath = str(os.path.join(r,item))
-                    fileName.append(fileNamePath)
-    if len(fileName) ==0 :
+                    fileName_with_path.append(fileNamePath)
+                    fileName.append(item)
+    if len(fileName_with_path) ==0 :
         print("No "+format+" file has been found!")
         
     else:
-        for i in fileName:
+        for i in fileName_with_path:
             print("fileName",i)
-    return fileName
+    return (fileName_with_path, fileName)
 
             
 #################
@@ -131,9 +134,11 @@ def runanalysis(workarearoot):
     
     #command5=(sourceRoot+'Cashregister.exe ')
     #os.system(command5)
-    fileName = findFiles(workarearoot,'.ldra')
+    fileName,file_just_name = findFiles(workarearoot,'.ldra')
+    count = 0
     #Generating XML for Code Coverage
     for i in fileName:
+        count = count + 1
         xml_file=i[:-5]+'_coverage.xml'
         
         command6 = '{}integration_util.exe /arg=0 /1={} /2={} '.format(toolsuiteroot,xml_file, i)
@@ -142,7 +147,9 @@ def runanalysis(workarearoot):
         xml=sendXml(xml_file)
         file_coverage = parseXml(xml)
         jacocoFile=i[:-5]+'_jacoco_coverage.xml'
+        coberturaFile = i[:-5]+'_cobertura.xml'
         jacocoWriter(jacocoFile)
+        coberturaGenerator(coberturaFile,file_just_name[count-1][:-5])
 
     
 def sendXml(tcfName):
@@ -179,7 +186,7 @@ def parseXml(xml_file):
                         else:
                             file_coverage.append(CoverageElement('File Coverage',obj.get('source'),file.get('type'), "Not Applicable","Not Applicable", "Not Applicable", "Not Applicable", "Not Applicable", "Not Applicable"))
                     elif (file.tag =='function'):
-                        print('File Coverage'+obj.get('source'))
+                        print('Procedure Coverage'+obj.get('source'))
                         for coverage in file :
                             if(coverage.get('description')  is None ):
                                 file_coverage.append(CoverageElement('Procedure Coverage',file.get('name'),coverage.get('type'), coverage.get('lines'),coverage.get('prevpcnt'), coverage.get('currpcnt'), coverage.get('combinedpcnt'), coverage.get('requiredpcnt'), coverage.get('status')))
@@ -193,6 +200,7 @@ def parseXml(xml_file):
                         print("-----------------------------------")
             
     return file_coverage        
+
 def jacocoWriter(jacocoFile):
     file_name=''
     jfile= open(jacocoFile,mode='w')
@@ -259,6 +267,254 @@ def jacocoWriter(jacocoFile):
                 jfile.write('      <counter type="'+i.getcovType()+'" missed="0" covered="0"/>\n')
     jfile.write('  </package>\n')
     jfile.write('</report>')        
+
+def coverage_calculator():
+    file_match = 0
+    file_name =""
+    files_name=[]
+    
+    statement_count = 0
+    statement_accum = 0
+    branch_accum = 0
+    branch_count =0
+    mcdc_count = 0
+    mcdc_accum = 0
+    total_statement = 0
+    total_branch =0
+    total_mcdc =0
+    
+    function_statement_count = 0
+    function_statement_accum = 0
+    function_branch_accum = 0
+    function_branch_count =0
+    function_mcdc_count = 0
+    function_mcdc_accum = 0
+    function_total_statement = 0
+    function_total_branch =0
+    function_total_mcdc =0
+    
+    function_total_branch_percentage=0
+    function_total_mcdc_percentage=0
+    total_statement_percentage = 0
+    total_branch_percentage =0
+    function_total_statement_percentage=0
+    total_mcdc_percentage=0
+    no_lines_valid=0
+    no_lines_covered=0
+    function_no_lines_valid=0
+    function_no_lines_covered=0
+    
+    overal_coverage=[]
+    for i in file_coverage:
+        if i.getcovElementType() == 'File Coverage':
+            if i.getcovType() == 'Statement Coverage':
+                if i.getcurCov() != 'Not Applicable':
+                    statement_accum = statement_accum + int(i.getcurCov())
+                    #print(statement_accum)
+                    statement_count = statement_count+1
+                    no_lines_valid = int(no_lines_valid) + int(i.getcovLines())
+                    
+            if i.getcovType() == 'Branch/Decision Coverage':        
+                if i.getcurCov() != 'Not Applicable':
+                    branch_accum = int(branch_accum) + int(i.getcurCov())
+                    branch_count= branch_count+1
+                    
+            if i.getcovType() == 'Modified Condition / Decision Coverage':        
+                if i.getcurCov() != 'Not Applicable':
+                    mcdc_accum = int(mcdc_accum) + int(i.getcurCov())
+                    mcdc_count= mcdc_count+1
+                    
+  
+        if i.getcovElementType() == 'Procedure Coverage':
+            if i.getcovType() == 'Statement Coverage':
+                if i.getcurCov() != 'Not Applicable':
+                    function_statement_accum = int(function_statement_accum) + int(i.getcurCov())
+                    #print(statement_accum)
+                    function_statement_count = function_statement_count+1
+                    function_no_lines_valid = int(function_no_lines_valid) + int(i.getcovLines())
+                
+            if i.getcovType() == 'Branch/Decision Coverage':        
+                if i.getcurCov() != 'Not Applicable':
+                    function_branch_accum = function_branch_accum + int(i.getcurCov())
+                    function_branch_count= function_branch_count+1
+            
+            if i.getcovType() == 'Modified Condition / Decision Coverage':        
+                if i.getcurCov() != 'Not Applicable':
+                    function_mcdc_accum = function_mcdc_accum + int(i.getcurCov())
+                    function_mcdc_count= function_branch_count+1
+    
+    if statement_count !=0:
+        total_statement_percentage = statement_accum / statement_count
+        no_lines_covered = int(no_lines_valid) * total_statement_percentage
+        
+    if function_statement_count !=0:
+        function_total_statement_percentage= function_statement_accum / function_statement_count
+        function_no_lines_covered = int(function_no_lines_valid)* function_total_statement_percentage
+    
+    print("Percentage Statement Coverage is:",str(total_statement))
+    print("Percentage function_Statement Coverage is:",str(function_total_statement))
+    
+    if branch_count !=0:
+        total_branch_percentage = branch_accum / branch_count
+    
+    if function_branch_count !=0:
+        function_total_branch_percentage = function_branch_accum / function_branch_count
+        
+    print("Percentage Branch Coverage is:",str(total_branch))   
+    print("Percentage function_Branch Coverage is:",str(function_total_branch))   
+    
+    if mcdc_count !=0:
+        total_mcdc_percentage = mcdc_accum/ mcdc_count
+    
+    if function_mcdc_count !=0:
+        function_total_mcdc_percentage = function_mcdc_accum/ function_mcdc_count
+    
+    print("Percentage MCDC Coverage is:",str(total_mcdc))
+    print("Percentage function_MCDC Coverage is:",str(total_mcdc))
+    
+    overal_coverage = [total_statement_percentage,total_branch_percentage,total_mcdc_percentage,function_total_statement_percentage,function_total_branch_percentage,function_total_mcdc_percentage,no_lines_valid, function_no_lines_valid, no_lines_covered, function_no_lines_covered]
+    
+    return (overal_coverage)
+
+
+def getCovYouNeed(elementName, coverageType):
+    for i in file_coverage:
+        if i.getcovElementName() == elementName :
+            if i.getcovType() == coverageType:
+                return (i)
+               
+
+
+def coberturaGenerator(coberturaFile, ProjectName):
+    overal_coverage = coverage_calculator()
+    print(overal_coverage)
+    print(str(overal_coverage[0]))
+    flag_file = 0
+    flag_proc = 0
+  
+    file_name=''
+    cfile= open(coberturaFile,mode='w')
+    cfile.write("<?xml version='1.0' encoding='UTF-8'?>\n")
+    cfile.write('<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">\n')
+    cfile.write ('<coverage lines-valid="'+ str(overal_coverage[6]))
+    cfile.write ('"  lines-covered="' + str(overal_coverage[8]))
+    cfile.write('"  line-rate="'+ str(overal_coverage[0]))
+    cfile.write('"  branches-valid="'+str(overal_coverage[7]))
+    cfile.write('"  branches-covered="'+str(overal_coverage[9]))
+    cfile.write('"  branch-rate="'+ str(overal_coverage[1]))
+    cfile.write('"  timestamp="1234"')
+    cfile.write('  complexity="1.0"')
+    cfile.write('  version="0.1">\n')
+    cfile.write('<sources>\n')
+    cfile.write('	<source>'+ProjectName+'</source>\n')
+    cfile.write('</sources>\n')
+    
+    #writing Packages in C we gonna have one Package called Project.LDRA
+    
+    cfile.write('<packages>\n')
+    cfile.write('	<package name="'+ProjectName)
+    cfile.write('"  line-rate="'+str(overal_coverage[0]))
+    cfile.write('"  branch-rate="'+str(overal_coverage[1]))
+    cfile.write('"  complexity="0"')
+    
+    cfile.write(' >\n')
+
+    #writing classes in cobertura which is equivalent as file name
+    for i in file_coverage:
+        if (i.getcovElementType() == 'File Coverage' and flag_file ==0 and i.getcovType() == 'Statement Coverage'):
+            cfile.write('	<classes>\n')        
+            flag_file = 1
+            flag_proc=0
+            cfile.write('	<class name="')
+            cfile.write(i.getcovElementName())
+            cfile.write('"  filename="')
+            cfile.write(i.getcovElementName())
+            cfile.write('"  complexity="0"')
+            cfile.write('  line-rate="')
+            cfile.write(str(i.getcocombCov()))
+            cfile.write('"  branch-rate="')
+            branch= getCovYouNeed(i.getcovElementName(),'Branch/Decision Coverage')
+                
+            if branch.getcocombCov() == "Not Applicable":
+                cfile.write("N/A")
+            else:
+                cfile.write(str(branch.getcocombCov()))
+            cfile.write('" >\n')
+            
+
+         
+        elif (i.getcovElementType() == 'Procedure Coverage' and flag_proc== 0 and i.getcovType() == 'Statement Coverage' and i.getcovStatus() !="Not Applicable"):
+            flag_proc = 1
+            cfile.write('		<methods>\n')
+            cfile.write('			<method name="'+ i.getcovElementName()+'"  signature="()V"  line-rate="'+i.getcocombCov())
+            cfile.write('"  branch-rate="')
+            branch= getCovYouNeed(i.getcovElementName(),'Branch/Decision Coverage')
+            
+            if branch.getcocombCov() == "Not Applicable":
+                cfile.write('N/A')
+            else:
+                cfile.write(str(branch.getcocombCov()))
+                
+            cfile.write('"  complexity="0" >\n')
+            cfile.write('                <lines><line number="'+i.getcovLines()+'"  hits="1" /></lines>\n')
+            cfile.write('            </method>\n')
+
+        
+        
+        elif(i.getcovElementType() == 'Procedure Coverage' and flag_proc== 1 and i.getcovType() == 'Statement Coverage' and i.getcovStatus() !="Not Applicable"):
+            cfile.write('			<method name="'+ i.getcovElementName()+'" signature="()V"  line-rate="'+i.getcocombCov())
+            cfile.write('"  branch-rate="')
+            branch= getCovYouNeed(i.getcovElementName(),'Branch/Decision Coverage')
+            if branch.getcocombCov() == "Not Applicable":
+                cfile.write('N/A')
+            else:
+                cfile.write(str(branch.getcocombCov()))
+            cfile.write('"  complexity="0" >\n')
+            cfile.write('                <lines><line number="'+i.getcovLines()+'" hits="1" /></lines>\n')
+            cfile.write('            </method>\n')            
+        
+        elif (i.getcovElementType() == 'File Coverage' and flag_file ==1 and i.getcovType() == 'Statement Coverage'):
+            cfile.write('		</methods>\n')        
+            cfile.write('       <lines></lines>\n')
+            cfile.write('    </class>\n')         
+            flag_proc=0
+            cfile.write('	<class name="')
+            cfile.write(i.getcovElementName())
+            cfile.write('" filename="')
+            cfile.write(i.getcovElementName())
+            cfile.write('"  complexity="0"')
+            cfile.write('  line-rate="')
+            cfile.write(i.getcocombCov())
+            cfile.write('"  branch-rate="')
+            branch= getCovYouNeed(i.getcovElementName(),'Branch/Decision Coverage')
+            if branch.getcocombCov() == "Not Applicable":
+                cfile.write('N/A"')
+            else:
+                cfile.write(str(branch.getcocombCov()))
+            cfile.write('" >\n')
+
+    cfile.write('		</methods>\n')
+    cfile.write('       <lines></lines>\n')
+    cfile.write('    </class>\n')
+            
+    cfile.write('    </classes>\n')
+    cfile.write('    </package>\n')
+    cfile.write('</packages>\n')
+    cfile.write('</coverage>\n')
+        
+            
+            
+            
+
+
+
+    flag_file = 0
+    flag_proc =0
+    
+    print(file_coverage)
+    for i in file_coverage:
+        if i.getcovElementType == 'filecoverage':
+            print("Non")
 def dynamicJsonFormatter():
     dictionary = {}
     ls=[]
